@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Swipe &amp; Hold</title>
+	<link rel="stylesheet" href="./components/normalize-css/normalize.css">
+	<link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+	
+	
+	<div class="wrapper">
+		<div id="0">0</div>
+		<div id="1">1</div>
+		<div id="2">2</div>
+		<div id="3">3</div>
+		<div id="4">4</div>
+	</div>
+
+
+	<script src="./components/jquery/dist/jquery.js"></script>
+	<script src="./components/jquery-touchswipe/jquery.touchSwipe.js"></script>
+	<script>
+		function getPosition(e) {
+			var posx = 0;
+			var posy = 0;
+
+			if (!e) var e = window.event;
+
+			if (e.pageX || e.pageY) {
+				posx = e.pageX;
+				posy = e.pageY;
+			}
+			else if (e.clientX || e.clientY) {
+				posx = e.clientX + document.body.scrollLeft
+					+ document.documentElement.scrollLeft;
+				posy = e.clientY + document.body.scrollTop
+					+ document.documentElement.scrollTop;
+		  	}
+
+			return {
+				x: posx,
+				y: posy
+			}
+		}
+
+		$(function(){
+			document.addEventListener( "click", function(e) {
+			  // var x = getPosition(e).x;
+			  // var y = getPosition(e).y;
+			  // console.log("x pos: "+ x +" // y pos:"+ y);
+			});
+
+			$('div.wrapper div').each(function(i, el){
+				// console.log(el, $(el));
+				if (i > 0) {
+					$(el).css({left: i+'00%', zIndex: 10+i});
+				}
+			});
+
+			var nextOffset;
+
+			$('div.wrapper div').swipe( {
+				//Generic swipe handler for all directions
+				swipeStatus: function(event, phase, direction, distance, duration, finger) {
+					var $current = $(this),
+						$next = $current.next(),
+						$previous = $current.prev();
+
+					console.log(phase, distance, direction);
+					
+				  	var x = getPosition(event).x;
+			 		var y = getPosition(event).y;
+					
+					if (phase === 'start') {
+						nextOffset = $next.offset().left;
+					}
+
+					if (phase !== 'cancel' || phase !== 'end') {
+						if (phase === 'move' && direction === 'left') {
+							console.log(nextOffset - distance, distance);
+							$next.css({left: nextOffset - distance});
+							//TODO: move all elements to the right of the current element 
+
+						}						
+					}
+
+					// if (direction === 'left') {
+					// 	// console.log($next, $next.length);
+					// 	if ($next.length > 0) {
+					// 		// $('html,body').animate({scrollLeft: distance}, 1000);
+					// 		// $(window).scrollLeft(distance);
+					// 		// console.log(distance);
+					// 		return false;
+					// 	}
+					// }
+				},
+				swipe: function(event, direction, distance, duration, fingerCount, fingerData) {
+
+
+					
+					var $current = $(this),
+						$next = $current.next(),
+						$previous = $current.prev();
+					
+					if (direction === 'left') {
+						// console.log($next, $next.length);
+						if ($next.length > 0) {
+							// $('html,body').animate({scrollLeft: $next.offset().left}, 1000);
+							// $(window).scrollLeft($next.offset().left);
+							// console.log(distance);
+							return false;
+						}
+					}
+					if (direction === 'right') {
+						// console.log(direction);
+						if ($previous.length > 0) {
+							// $('html,body').animate({scrollLeft: $previous.offset().left}, 1000);
+							// $(window).scrollLeft($previous.offset().left);
+							// console.log(distance);
+							return false;
+						}
+					}
+
+				},
+			});
+		});
+	</script>
+</body>
+</html>

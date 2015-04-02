@@ -1,0 +1,50 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /*overflow-x: hidden;*/
+}
+
+.wrapper div {
+  height: 400px;
+  border: 1px solid red;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.swipe {
+  overflow: hidden;
+  visibility: hidden;
+  position: relative;
+  /*width: 100%;*/
+}
+.swipe-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.swipe-wrap > div {
+  float:left;
+  width:100%;
+  position: relative;
+  height: 400px;
+  /*border: 1px solid blue;*/
+}
+
+.swipe-wrap > div:nth-child(even) {
+  background-color: red;
+}
+
+.swipe-wrap > div:nth-child(odd) {
+  background-color: blue;
+}
